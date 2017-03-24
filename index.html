@@ -1,0 +1,71 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+	<title>First Game</title>
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<br>
+<center><div id="game"></div><center>
+
+<script type="text/javascript">
+
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
+
+function preload() {
+	game.load.atlasJSONHash("sans", "assets/Sans/sans.png", "assets/Sans/sans.json")
+}
+
+var sans
+var cursors
+
+function create() {
+	//  We're going to be using physics, so enable the Arcade Physics system
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+
+	sans = game.add.sprite(32, game.world.height - 150, 'sans')
+
+	game.physics.arcade.enable(sans);
+
+	sans.animations.add('right', ["r1", "r2", "r3", "r4"], 10, true);
+	sans.animations.add("left", ["l1", "l2", "l3", "l4"], 10, true);
+	//sans.animations.add('idle', [0, 1], 1,  true);
+
+	//  Our controls.
+    cursors = game.input.keyboard.createCursorKeys();
+}
+
+function update() {
+    //  Reset the sans velocity (movement)
+    sans.body.velocity.x = 0;
+
+    if (cursors.right.isDown)
+    {
+        //  Move to the right
+        sans.body.velocity.x = 80;
+        sans.animations.play('right');
+    }
+    else if (cursors.left.isDown)
+    {
+    	sans.body.velocity.x = -80
+    	sans.animations.play("left")
+    }
+    else
+    {
+        //  Stand still
+        sans.animations.stop();
+        sans.frame = 0
+        //sans.animations.play('idle')
+    }
+}
+
+</script>
+
+</body>
+</html>
